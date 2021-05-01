@@ -1,0 +1,13 @@
+name: 'javascript-runner'
+description: 'Execute a nodejs script in the repository'
+inputs:
+  script:
+    description: 'Scripts that need to be executed'
+    required: true
+    default: ''
+outputs:
+  time:
+    description: 'Total time in use'
+runs:
+  using: 'node12'
+  main: 'index.js'
