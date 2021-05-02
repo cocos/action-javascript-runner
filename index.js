@@ -12,8 +12,7 @@ try {
     const scriptFile = path.join(process.cwd(), script);
 
     if (!script || !fs.existsSync(scriptFile)) {
-        core.setFailed(`The script does not exist: ${script}`);
-        return;
+        throw new Error(`The script does not exist: ${script}`);
     }
 
     console.log(`Executing the script: ${script}`);
