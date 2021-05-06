@@ -16,7 +16,7 @@ try {
     }
 
     console.log(`Executing the script: ${script}`);
-    const child = cp.spawn('node' + (process.platform === 'win32' ? '.cmd' : ''), [
+    const child = cp.spawn('node', [
         scriptFile,
     ], {
         cwd: process.cwd(),
