@@ -5,6 +5,10 @@ inputs:
     description: 'Scripts that need to be executed'
     required: true
     default: ''
+  args:
+    description: 'Scripts arguments'
+    required: true
+    default: ''
 outputs:
   time:
     description: 'Total time in use'

@@ -9,6 +9,7 @@ const core = require('@actions/core');
 const time = Date.now();
 try {
     const script = core.getInput('script');
+    const args = (core.getInput('args') || '').split(' ');
     const scriptFile = path.join(process.cwd(), script);
 
     if (!script || !fs.existsSync(scriptFile)) {
@@ -17,7 +18,7 @@ try {
 
     console.log(`Executing the script: ${script}`);
     const child = cp.spawn('node', [
-        scriptFile,
+        scriptFile, ...args,
     ], {
         cwd: process.cwd(),
         stdio: [0, 1, 2],
