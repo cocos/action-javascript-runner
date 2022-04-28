@@ -1,40 +1,41 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const cp = require('child_process');
-const core = require('@actions/core');
-// const github = require('@actions/github');
+const { existsSync } = require('fs');
+const { join } = require('path');
+const { spawn } = require('child_process');
+const { getInput, setOutput, setFailed } = require('@actions/core');
+const github = require('@actions/github');
 
 const time = Date.now();
 try {
-    const script = core.getInput('script');
-    const args = (core.getInput('args') || '').split(' ');
-    const scriptFile = path.join(process.cwd(), script);
+    const script = getInput('script');
+    const args = (getInput('args') || '').split(' ');
+    const scriptFile = join(process.cwd(), script);
 
-    if (!script || !fs.existsSync(scriptFile)) {
-        throw new Error(`The script does not exist: ${script}`);
+    if (!script || !existsSync(scriptFile)) {
+        throw new Error(`The script does not exist: ${scriptFile}`);
     }
 
-    console.log(`Executing the script: ${script}`);
-    const child = cp.spawn('node', [
+    console.log(`Executing the script: ${scriptFile}`);
+    const child = spawn('node', [
         scriptFile, ...args,
     ], {
         cwd: process.cwd(),
-        stdio: [0, 1, 2],
+        stdio: [0, 1, 2, 'ipc'],
+        env: Object.assign({}, process.env),
     });
 
     child.on('exit', (code) => {
         if (code !== 0) {
-            core.setOutput('time', Date.now() - time);
-            core.setFailed('Error in execution');
+            setOutput('time', Date.now() - time);
+            setFailed('Error in execution');
         }
     });
     child.on('error', (error) => {
-        core.setOutput('time', Date.now() - time);
-        core.setFailed(`Error in execution: ${error.message}`);
+        setOutput('time', Date.now() - time);
+        setFailed(`Error in execution: ${error.message}`);
     });
 } catch (error) {
-    core.setOutput('time', Date.now() - time);
-    core.setFailed(error.message);
+    setOutput('time', Date.now() - time);
+    setFailed(error.message);
 }

@@ -16,6 +16,11 @@
 
 ## Example usage
 
+```yaml
 uses: VisualSJ/action-javascript-runner@v1.1
 with:
   script: './workflow/init.js'
+  args: '--checkout=hard'
+env:
+  GITHUB_PULL_REQUEST_BODY: ${{ github.event.pull_request.body }}
+```
